@@ -8,7 +8,9 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -31,25 +33,33 @@ public class Window extends JFrame {
         applyButton = new JButton("apply");
         applyButton.addActionListener(actionListener());
 
-        JPanel panel = new JPanel(new GridLayout(rows + 2, 3));
-        panel.add(new JLabel("checked out"));
-        panel.add(new JLabel("diff"));
-        panel.add(new JLabel("hash and commit message"));
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = GridBagConstraints.RELATIVE;
+        c.gridy = 0;
+        c.insets = new Insets(2, 2, 2, 2);
+        panel.add(new JLabel("checked out"), c);
+        panel.add(new JLabel("diff"), c);
+        panel.add(new JLabel("hash and commit message"), c);
         for (int i = 0; i < rows; i++) {
+            c.gridy++;
+            c.anchor = GridBagConstraints.CENTER;
             checkedOuts[i] = new JRadioButton();
-            panel.add(checkedOuts[i]);
+            panel.add(checkedOuts[i], c);
 
             diffs[i] = new JRadioButton();
-            panel.add(diffs[i]);
+            panel.add(diffs[i], c);
 
+            c.anchor = GridBagConstraints.WEST;
             JTextField textField = new JTextField(gitLogRetriever.getHashes()[i] + ": " + gitLogRetriever.getMessages()[i]);
             textField.setBorder(null);
             textField.setEditable(false);
-            panel.add(textField);
+            panel.add(textField, c);
         }
-        panel.add(new JLabel());
-        panel.add(applyButton);
-        panel.add(new JLabel());
+        c.gridy++;
+        c.gridwidth = 3;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(applyButton, c);
         setContentPane(panel);
 
         ButtonGroup one = new ButtonGroup();
