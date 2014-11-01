@@ -93,14 +93,17 @@ public class Window extends JFrame {
                         break;
                     }
                 }
-                String commandOne = "git checkout " + gitLogRetriever.getHashes()[j];
-                String commandTwo = "git reset --soft " + gitLogRetriever.getHashes()[i];
-                System.out.println(commandOne);
-                System.out.println(commandRunner.exec(commandOne));
-                System.out.println(commandTwo);
-                System.out.println(commandRunner.exec(commandTwo));
+
+                execute("git reset --hard");
+                execute("git checkout " + gitLogRetriever.getHashes()[j]);
+                execute("git reset --soft " + gitLogRetriever.getHashes()[i]);
             }
         };
+    }
+
+    private void execute(String command) {
+        System.out.println(command);
+        System.out.println(commandRunner.exec(command));
     }
 
 }
